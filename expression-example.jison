@@ -34,17 +34,29 @@ expressions
     ;
 
 e
-    :'+' e  e
-        {$$ = [$1 ,$2, $3]}
-    |'-' e  e
-         {$$ = [$1 ,$2, $3]}
-    |'*' e e
-         {$$ = [$1 ,$2, $3]}
-    |'/' e e
-         {$$ = [$1 ,$2, $3]}
-    | NUMBER
-        {$$ = Number(yytext);}
-    | '(' e ')'
-        {$$ = $2;}
+    : "(" operator args ")"
+        {$$ = [$2].concat($3)}
+    ;
+args  
+    : NUMBER
+        {$$= Number(yytext);}
+    | NUMBER e
+        {$$ = [Number($1),$2];}
+    | e NUMBER
+        {$$ = [$1,Number($2)]}
+    | NUMBER args
+        {$$ = [Number($1),$2]}
+    | e e
+        {$$ =[$1,$2] }
+    ;
+operator
+    : "+"
+        {$$ = $1;}
+    | "-"
+        {$$ = $1;}
+    | "*"
+        {$$ = $1;}
+    | "/"
+        {$$ = $1;}
     ;
 

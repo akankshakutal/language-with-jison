@@ -72,12 +72,12 @@
   }
 */
 var expressionExample = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,3],$V1=[1,4],$V2=[1,5],$V3=[1,6],$V4=[1,7],$V5=[1,8],$V6=[5,6,7,8,9,10,11,12];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,3],$V1=[1,11],$V2=[6,10],$V3=[1,16];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"expressions":3,"e":4,"EOF":5,"+":6,"-":7,"*":8,"/":9,"NUMBER":10,"(":11,")":12,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"+",7:"-",8:"*",9:"/",10:"NUMBER",11:"(",12:")"},
-productions_: [0,[3,2],[4,3],[4,3],[4,3],[4,3],[4,1],[4,3]],
+symbols_: {"error":2,"expressions":3,"e":4,"EOF":5,"(":6,"operator":7,"args":8,")":9,"NUMBER":10,"+":11,"-":12,"*":13,"/":14,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"(",9:")",10:"NUMBER",11:"+",12:"-",13:"*",14:"/"},
+productions_: [0,[3,2],[4,4],[8,1],[8,2],[8,2],[8,2],[8,2],[7,1],[7,1],[7,1],[7,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -87,19 +87,31 @@ case 1:
  typeof console !== 'undefined' ? console.log($$[$0-1]) : print($$[$0-1]);
           return $$[$0-1]; 
 break;
-case 2: case 3: case 4: case 5:
-this.$ = [$$[$0-2] ,$$[$0-1], $$[$0]]
+case 2:
+this.$ = [$$[$0-2]].concat($$[$0-1])
+break;
+case 3:
+this.$= Number(yytext);
+break;
+case 4:
+this.$ = [Number($$[$0-1]),$$[$0]];
+break;
+case 5:
+this.$ = [$$[$0-1],Number($$[$0])]
 break;
 case 6:
-this.$ = Number(yytext);
+this.$ = [Number($$[$0-1]),$$[$0]]
 break;
 case 7:
-this.$ = $$[$0-1];
+this.$ =[$$[$0-1],$$[$0]] 
+break;
+case 8: case 9: case 10: case 11:
+this.$ = $$[$0];
 break;
 }
 },
-table: [{3:1,4:2,6:$V0,7:$V1,8:$V2,9:$V3,10:$V4,11:$V5},{1:[3]},{5:[1,9]},{4:10,6:$V0,7:$V1,8:$V2,9:$V3,10:$V4,11:$V5},{4:11,6:$V0,7:$V1,8:$V2,9:$V3,10:$V4,11:$V5},{4:12,6:$V0,7:$V1,8:$V2,9:$V3,10:$V4,11:$V5},{4:13,6:$V0,7:$V1,8:$V2,9:$V3,10:$V4,11:$V5},o($V6,[2,6]),{4:14,6:$V0,7:$V1,8:$V2,9:$V3,10:$V4,11:$V5},{1:[2,1]},{4:15,6:$V0,7:$V1,8:$V2,9:$V3,10:$V4,11:$V5},{4:16,6:$V0,7:$V1,8:$V2,9:$V3,10:$V4,11:$V5},{4:17,6:$V0,7:$V1,8:$V2,9:$V3,10:$V4,11:$V5},{4:18,6:$V0,7:$V1,8:$V2,9:$V3,10:$V4,11:$V5},{12:[1,19]},o($V6,[2,2]),o($V6,[2,3]),o($V6,[2,4]),o($V6,[2,5]),o($V6,[2,7])],
-defaultActions: {9:[2,1]},
+table: [{3:1,4:2,6:$V0},{1:[3]},{5:[1,4]},{7:5,11:[1,6],12:[1,7],13:[1,8],14:[1,9]},{1:[2,1]},{4:12,6:$V0,8:10,10:$V1},o($V2,[2,8]),o($V2,[2,9]),o($V2,[2,10]),o($V2,[2,11]),{9:[1,13]},{4:14,6:$V0,8:15,9:[2,3],10:$V1},{4:17,6:$V0,10:$V3},o([5,6,9,10],[2,2]),{4:17,6:$V0,9:[2,4],10:$V3},{9:[2,6]},{9:[2,5]},{9:[2,7]}],
+defaultActions: {4:[2,1],15:[2,6],16:[2,5],17:[2,7]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -576,19 +588,19 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespace */
 break;
-case 1:return 11
+case 1:return 6
 break;
-case 2:return 12
+case 2:return 9
 break;
 case 3:return 10
 break;
-case 4:return 8
+case 4:return 13
 break;
-case 5:return 9
+case 5:return 14
 break;
-case 6:return 7
+case 6:return 12
 break;
-case 7:return 6
+case 7:return 11
 break;
 case 8:return 5
 break;

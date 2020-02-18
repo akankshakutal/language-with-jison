@@ -35,7 +35,22 @@ expressions
 
 e
     : "(" operator args ")"
-        {$$ = [$2].concat($3)}
+        {{
+        const insertSymbol = function(symbol, list) {
+            if (Array.isArray(list)) {
+                list.forEach(element => {
+                    if (element instanceof Array) {
+                        if (element.length == 2) 
+                            element.unshift(symbol);
+                        insertSymbol(symbol, element);
+                    }
+                })
+            }
+            return list;
+        };
+        insertSymbol($2, $3);
+        $$ = [$2].concat($3);
+        }}
     ;
 args  
     : NUMBER

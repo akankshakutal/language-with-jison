@@ -1,1 +1,1 @@
-calc expression-example.jison expression-example.js runTest.sh (* 3 4) (* 5 6)
+(* 3 6 8 (* 6 7 6) (* 5 6 7))

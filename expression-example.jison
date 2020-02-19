@@ -36,7 +36,7 @@ expressions
 e
     : "(" operator args ")"
         {{
-        const insertSymbol = function(symbol, list) {
+        const insertSymbol = (symbol, list) => {
             if (Array.isArray(list)) {
                 list.forEach(element => {
                     if (element instanceof Array) {
@@ -51,18 +51,14 @@ e
         insertSymbol($2, $3);
         $$ = [$2].concat($3);
         }}
+    | NUMBER
+        {$$= Number(yytext);}
     ;
 args  
-    : NUMBER
-        {$$= Number(yytext);}
-    | NUMBER e
-        {$$ = [Number($1),$2];}
-    | e NUMBER
-        {$$ = [$1,Number($2)]}
-    | NUMBER args
-        {$$ = [Number($1),$2]}
-    | e e
+    : args e
         {$$ =[$1,$2] }
+    | e
+        {$$ = $1}
     ;
 operator
     : "+"

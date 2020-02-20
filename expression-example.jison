@@ -31,8 +31,16 @@
 
 expressions
     : e EOF
-        { typeof console !== 'undefined' ? console.log($1) : print($1);
-          return $1; }
+        { 
+        const convertToJS= require("./clojureConverter.js")
+        const fs = require('fs');
+
+        fs.writeFile("./test.js", convertToJS($1), function(err) {
+            if(err) return err
+        });
+
+        return  convertToJS($1); 
+        }
     ;
 
 e
@@ -50,7 +58,6 @@ expr
     | ID 
         {$$=$1;}
 ;
-
 args  
     : NUMBER
         {$$= Number(yytext);}
@@ -63,7 +70,6 @@ args
     | e e
         {$$ =[$1,$2] }
     ;
-    
 operator
     : "+"
         {$$ = $1;}

@@ -8,6 +8,8 @@
 \s+                   /* skip whitespace */
 "("                   return '('
 ")"                   return ')'
+"def"                 return 'DEF'
+[a-zA-Z][a-zA-Z0-9]*  return 'ID'
 [0-9]+("."[0-9]+)?\b  return 'NUMBER'
 "*"                   return '*'
 "/"                   return '/'
@@ -36,7 +38,19 @@ expressions
 e
     : "(" operator args ")"
         {$$ = [$2].concat($3);}
+    | "(" DEF ID expr ")"
+        {$$ = ["=",$3].concat($4);}
     ;
+
+expr
+    : e
+        {$$ = [$1];}
+    | args
+        {$$ = [$1]}
+    | ID 
+        {$$=$1;}
+;
+
 args  
     : NUMBER
         {$$= Number(yytext);}
@@ -49,6 +63,7 @@ args
     | e e
         {$$ =[$1,$2] }
     ;
+    
 operator
     : "+"
         {$$ = $1;}

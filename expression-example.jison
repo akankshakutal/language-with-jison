@@ -35,30 +35,19 @@ expressions
 
 e
     : "(" operator args ")"
-        {{
-        const insertSymbol = (symbol, list) => {
-            if (Array.isArray(list)) {
-                list.forEach(element => {
-                    if (element instanceof Array) {
-                        if (element.length == 2) 
-                            element.unshift(symbol);
-                        insertSymbol(symbol, element);
-                    }
-                })
-            }
-            return list;
-        };
-        insertSymbol($2, $3);
-        $$ = [$2].concat($3);
-        }}
-    | NUMBER
-        {$$= Number(yytext);}
+        {$$ = [$2].concat($3);}
     ;
 args  
-    : args e
+    : NUMBER
+        {$$= Number(yytext);}
+    | NUMBER e
+        {$$ = [Number($1),$2];}
+    | NUMBER args
+        {$$ = [Number($1)].concat($2)}
+    | e args
+        {$$ = [$1].concat($2)}
+    | e e
         {$$ =[$1,$2] }
-    | e
-        {$$ = $1}
     ;
 operator
     : "+"
@@ -70,4 +59,5 @@ operator
     | "/"
         {$$ = $1;}
     ;
+
 

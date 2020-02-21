@@ -1,9 +1,29 @@
+const _ = require("lodash");
+
+const insertSymbol = function(list) {
+  const symbol = list.shift();
+
+  const result = list.reduce((acc, element) => {
+    if (Array.isArray(element)) {
+      const temp = ["(", insertSymbol(element), ")"];
+      acc.push(temp.join(" "), symbol);
+    } else acc.push(element, symbol);
+    return acc;
+  }, []);
+
+  if (result[result.length - 1] == symbol) result.pop();
+  return result.join(" ");
+};
+
 const convertToJS = tree => {
   switch (tree[0]) {
     case "=":
       return `const ${tree[1]} = ${tree[2]};`;
+    case "+":
+    case "-":
     case "*":
-      return `${tree[1]} * ${tree[2]}`;
+    case "/":
+      return insertSymbol(tree);
   }
 };
 

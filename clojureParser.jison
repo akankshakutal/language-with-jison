@@ -34,12 +34,13 @@ expressions
         { 
         const convertToJS= require("./clojureConverter.js")
         const fs = require('fs');
+        const jsString = convertToJS($1)
 
-        fs.writeFile("./test.js", convertToJS($1), function(err) {
+        fs.writeFile("./test.js",jsString , function(err) {
             if(err) return err
         });
 
-        return  convertToJS($1); 
+        return jsString; 
         }
     ;
 

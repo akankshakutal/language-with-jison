@@ -1,6 +1,6 @@
 .rebel_*
 node_modules/
 package-lock.json
-test.js
-**/calc
+**/test.js
+calc
 **/clojureParser.js

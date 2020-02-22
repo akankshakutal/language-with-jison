@@ -15,10 +15,15 @@ const insertSymbol = function(list) {
   return result.join(" ");
 };
 
+const defineVariable = expression => {
+  return Array.isArray(expression) ? insertSymbol(expression) : expression;
+};
+
 const convertToJS = tree => {
   switch (tree[0]) {
-    case "=":
-      return `const ${tree[1]} = ${tree[2]};`;
+    case "=": {
+      return `const ${tree[1]} = ${defineVariable(tree[2])};`;
+    }
     case "+":
     case "-":
     case "*":

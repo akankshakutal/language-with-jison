@@ -6,6 +6,7 @@
 %%
 
 \s+                   /* skip whitespace */
+"'"                   return "'"
 "("                   return '('
 ")"                   return ')'
 "def"                 return 'DEF'
@@ -20,11 +21,6 @@
 
 /lex
 
-/* operator associations and precedence */
-
-%left '+' '-'
-%left '*' '/'
-
 %start expressions
 
 %% /* language grammar */
@@ -34,13 +30,13 @@ expressions
         { 
         const convertToJS= require("./clojureConverter.js")
         const fs = require('fs');
-        const jsString = convertToJS($1)
+        const jsCode = convertToJS($1)
 
-        fs.writeFile("./test.js",jsString , function(err) {
+        fs.writeFile("./test.js",jsCode , function(err) {
             if(err) return err
         });
 
-        return jsString; 
+        return jsCode; 
         }
     ;
 
@@ -56,8 +52,12 @@ expr
         {$$ = [$1];}
     | args
         {$$ = [$1]}
-    | ID 
-        {$$=$1;}
+    | ID
+        {$$ = $1;}
+    |"'" ID "'"
+        {$$=[$1, $2, $3].join("");}
+    | "(" ")"
+        {$$=[$1,$2].join("")}
 ;
 args  
     : NUMBER

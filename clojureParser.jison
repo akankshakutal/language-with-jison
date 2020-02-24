@@ -6,10 +6,13 @@
 %%
 
 \s+                   /* skip whitespace */
+"["                   return '['
+"]"                   return ']'
 "'"                   return "'"
 "("                   return '('
 ")"                   return ')'
 "def"                 return 'DEF'
+"defn"                return 'DEFN'
 [a-zA-Z][a-zA-Z0-9]*  return 'ID'
 [0-9]+("."[0-9]+)?\b  return 'NUMBER'
 "*"                   return '*'
@@ -45,20 +48,19 @@ e
         {$$ = [$2].concat($3);}
     | "(" DEF ID expr ")"
         {$$ = ["=",$3].concat($4);}
+    | vector
+        {$$ = $1;}
+    | "(" DEFN ID vector e")"
+        {$$ = ["Function", $3, $4, $5];}
     ;
 
-expr
-    : e
-        {$$ = [$1];}
-    | args
-        {$$ = [$1]}
-    | ID
-        {$$ = $1;}
-    |"'" ID "'"
-        {$$=[$1, $2, $3].join("");}
-    | "(" ")"
-        {$$=[$1,$2].join("")}
-;
+vector 
+    : "[" args "]"    
+        {$$ = ["Array", $2];}
+    // | "[" params "]"
+    //     {$$ = ["Array", $2];}
+    ;
+
 args  
     : NUMBER
         {$$= Number(yytext);}
@@ -69,8 +71,30 @@ args
     | e args
         {$$ = [$1].concat($2)}
     | e e
-        {$$ =[$1,$2] }
+        {$$ = [$1,$2] }
+    | params
+        {$$ = $1}
     ;
+
+params
+    :ID params
+        {$$ = [$1].concat($2);}
+    |ID
+        {$$ = $1}
+    ;
+
+expr
+    : e
+        {$$ = [$1];}
+    | args
+        {$$ = [$1]}
+    |"'" ID "'"
+        {$$=[$1, $2, $3].join("");}
+    | "(" ")"
+        {$$=[$1,$2].join("")}
+    
+;
+
 operator
     : "+"
         {$$ = $1;}

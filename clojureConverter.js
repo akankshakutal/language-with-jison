@@ -16,19 +16,36 @@ const insertSymbol = function(list) {
 };
 
 const defineVariable = expression => {
-  return Array.isArray(expression) ? insertSymbol(expression) : expression;
+  if (expression[0] == "Array") {
+    return "[" + expression[1].toString() + "]";
+  }
+  if (Array.isArray(expression)) {
+    return insertSymbol(expression);
+  }
+  return expression;
+};
+
+const defineFunction = tree => {
+  const fnName = tree[1];
+  const args = tree[2].slice(1);
+  const body = insertSymbol(tree[3]);
+  return `const ${fnName} = function (${args}) {
+    return ${body};
+  }`;
 };
 
 const convertToJS = tree => {
   switch (tree[0]) {
-    case "=": {
+    case "=":
       return `const ${tree[1]} = ${defineVariable(tree[2])};`;
-    }
     case "+":
     case "-":
     case "*":
     case "/":
       return insertSymbol(tree);
+    case "Function": {
+      return defineFunction(tree);
+    }
   }
 };
 

@@ -29,7 +29,7 @@
 %% /* language grammar */
 
 expressions
-    : e EOF
+    : code EOF
         { 
         const convertToJS= require("./clojureConverter.js")
         const fs = require('fs');
@@ -43,9 +43,16 @@ expressions
         }
     ;
 
+code 
+    : e code
+     {$$ = [$1].concat([$2])}
+    | e
+     {$$ = $1}
+    ;
+
 e
     : "(" operator args ")"
-        {$$ = [$2].concat($3);}
+        {$$ = [].concat($2, $3);}
     | "(" DEF ID expr ")"
         {$$ = ["=",$3].concat($4);}
     | vector
@@ -57,8 +64,6 @@ e
 vector 
     : "[" args "]"    
         {$$ = ["Array", $2];}
-    // | "[" params "]"
-    //     {$$ = ["Array", $2];}
     ;
 
 args  
@@ -74,12 +79,12 @@ args
         {$$ = [$1,$2] }
     | params
         {$$ = $1}
+    | params args
+        {$$ = [$1, $2]}
     ;
 
 params
-    :ID params
-        {$$ = [$1].concat($2);}
-    |ID
+    :ID
         {$$ = $1}
     ;
 
@@ -104,6 +109,8 @@ operator
         {$$ = $1;}
     | "/"
         {$$ = $1;}
+    | ID
+        {$$ = ["FunctionCall", $1]}
     ;
 
 

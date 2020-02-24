@@ -46,6 +46,11 @@ const convertToJS = tree => {
     case "Function": {
       return defineFunction(tree);
     }
+    case "FunctionCall": {
+      return `${tree[1]}(${tree.slice(2)})`;
+    }
+    default:
+      return tree.map(x => convertToJS(x)).join("\n");
   }
 };
 
